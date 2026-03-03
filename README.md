@@ -420,6 +420,38 @@ int main()
 }
 
 
+
+test case 3 
+
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+
+int main() {
+    pid_t pid = fork();
+
+    if (pid < 0) {
+        // Fork failed
+        printf("Fork Failed\n");
+    }
+    else if (pid == 0) {
+        // Child process
+        // Delay slightly so parent prints first
+        sleep(1);
+        printf("Child Process\n");
+    }
+    else {
+        // Parent process prints immediately
+        printf("Parent Process\n");
+        // Wait for child to finish
+        wait(NULL);
+    }
+
+    return 0;
+}
+
+
 test case 4  
 
 #include <stdio.h>
