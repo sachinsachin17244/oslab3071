@@ -418,3 +418,34 @@ int main()
     sem_destroy(&mutex);
     return 0;
 }
+
+
+test case 5 
+
+#include <stdio.h>
+#include <unistd.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+
+int main() {
+    int fd[2];          // File descriptors for pipe
+    pipe(fd);           // Create pipe
+
+    if (fork() == 0) {
+        // Child process
+        close(fd[1]);   // Close write end
+        char buf[50];
+        read(fd[0], buf, sizeof(buf));
+        printf("Child received: %s\n", buf);
+        close(fd[0]);   // Close read end
+    } else {
+        // Parent process
+        close(fd[0]);   // Close read end
+        write(fd[1], "Hello Child", strlen("Hello Child") + 1);
+        close(fd[1]);   // Close write end
+        wait(NULL);     // Wait for child to finish
+    }
+
+    return 0;
+}
